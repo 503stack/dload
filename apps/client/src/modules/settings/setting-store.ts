@@ -1,4 +1,4 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import { Settings } from '@dload/shared'
 
 export const useSettingStore = create<{

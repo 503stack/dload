@@ -10,10 +10,11 @@ import {
   Group,
   Select,
   Button,
+  type MantineColorScheme,
 } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { z } from 'zod'
-import { useForm, zodResolver } from '@mantine/form'
+import { useForm, schemaResolver } from '@mantine/form'
 
 import { useSettingStore } from '@/modules/settings/setting-store'
 import * as settingService from '@/modules/settings/setting-service'
@@ -39,7 +40,7 @@ const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
   const { colorScheme, setColorScheme } = useMantineColorScheme()
 
   const form = useForm({
-    validate: zodResolver(settingsSchema),
+    validate: schemaResolver(settingsSchema),
     initialValues: {
       downloadPaths: settings.downloadPaths,
       maximumActiveDownloads: settings.maximumActiveDownloads,
@@ -55,7 +56,7 @@ const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
   }
 
   async function handleSubmit() {
-    const result = form.validate()
+    const result = await form.validate()
     if (result.hasErrors) return
     setSubmitting(true)
     try {
@@ -98,7 +99,7 @@ const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
             { value: 'light', label: 'Light' },
           ]}
           value={colorScheme}
-          onChange={setColorScheme}
+          onChange={(value) => value && setColorScheme(value as MantineColorScheme)}
         />
         <Space h="lg" />
         <Title order={5}>Server Settings</Title>

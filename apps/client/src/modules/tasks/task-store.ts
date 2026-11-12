@@ -1,4 +1,4 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import { Task } from '@dload/shared'
 
 export const useTaskStore = create<{

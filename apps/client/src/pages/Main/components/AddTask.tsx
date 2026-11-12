@@ -10,7 +10,7 @@ import {
   Button,
 } from '@mantine/core'
 import { z } from 'zod'
-import { useForm, zodResolver } from '@mantine/form'
+import { useForm, schemaResolver } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 
 import * as taskService from '@/modules/tasks/task-service'
@@ -32,7 +32,7 @@ const AddTask: React.FC<AddTaskProps> = ({ visible, onClose }) => {
   const [directDownload, setDirectDownload] = useState(true)
   const { downloadPaths } = useSettingStore(({ settings }) => settings)
   const form = useForm({
-    validate: zodResolver(addTaskSchema),
+    validate: schemaResolver(addTaskSchema),
     initialValues: {
       url: '',
       name: '',
@@ -53,7 +53,7 @@ const AddTask: React.FC<AddTaskProps> = ({ visible, onClose }) => {
   }
 
   async function handleSubmit(type: 'DOWNLOAD' | 'QUEUE') {
-    const result = form.validate()
+    const result = await form.validate()
     if (result.hasErrors) return
     setSubmitting(true)
     try {

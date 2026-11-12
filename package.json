@@ -5,6 +5,7 @@
   "author": "fuzzknob",
   "license": "MIT",
   "private": true,
+  "packageManager": "yarn@1.22.22",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -14,9 +15,9 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "clean": "turbo run clean",
-    "aria:dev": "turbo run dev --scope=aria",
-    "client:dev": "turbo run dev --scope=client",
-    "server:dev": "turbo run dev --scope=server"
+    "aria:dev": "turbo run dev --filter=@dload/aria",
+    "client:dev": "turbo run dev --filter=@dload/client",
+    "server:dev": "turbo run dev --filter=@dload/server"
   },
   "dependencies": {
     "turbo": "^2.0.0"

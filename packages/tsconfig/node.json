@@ -8,6 +8,7 @@
     "outDir": "./dist",
     "lib": ["ES2020"],
     "importHelpers": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["node"]
   }
 }

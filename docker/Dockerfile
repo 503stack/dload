@@ -21,7 +21,7 @@ RUN yarn global add "turbo@$(node -p "require('/tmp/root-package.json').dependen
 
 COPY . .
 
-RUN turbo prune --scope=@dload/aria --scope=@dload/server --scope=@dload/client --docker --out-dir=out
+RUN turbo prune @dload/aria @dload/server @dload/client --docker --out-dir=out
 
 FROM base AS installer
 
@@ -48,6 +48,7 @@ ENV \
 
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends \
       ca-certificates \
+      libatomic1 \
       procps \
       bash \
       curl \
@@ -67,8 +68,7 @@ WORKDIR /app
 COPY --from=installer /app .
 COPY --from=installer /app/apps/client/dist /usr/share/nginx/html
 
-RUN addgroup --system --gid 1000 dload
-RUN adduser --system --uid 1000 dload
-RUN usermod -g dload dload
+RUN groupadd --system --gid 1000 dload && \
+    useradd --system --uid 1000 --gid dload --no-create-home --home-dir /nonexistent --shell /usr/sbin/nologin dload
 
 ENTRYPOINT [ "/init" ]

@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@dload/tsconfig": "*",
+    "@types/node": "^26.0.0",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
     "tsup": "^9.0.0",
