@@ -16,6 +16,8 @@ import { notifications } from '@mantine/notifications'
 import { z } from 'zod'
 import { useForm, schemaResolver } from '@mantine/form'
 
+import { useShallow } from 'zustand/react/shallow'
+
 import { useSettingStore } from '@/modules/settings/setting-store'
 import * as settingService from '@/modules/settings/setting-service'
 
@@ -31,11 +33,12 @@ type SettingsProps = {
 
 const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
   const [isSubmitting, setSubmitting] = useState(false)
+  // zustand 5: a selector returning a new object needs useShallow, or it re-renders forever
   const { settings, setSettings } = useSettingStore(
-    ({ settings, setSettings }) => ({
+    useShallow(({ settings, setSettings }) => ({
       settings,
       setSettings,
-    }),
+    })),
   )
   const { colorScheme, setColorScheme } = useMantineColorScheme()
 
