@@ -12,7 +12,7 @@
     "chalk": "^4.1.2",
     "cors": "^2.8.5",
     "dotenv-flow": "^4.1.0",
-    "express": "^4.18.1",
+    "express": "^5.0.0",
     "fs-extra": "^10.1.0",
     "immer": "^9.0.15",
     "libaria2-ts": "^1.0.91",
@@ -22,7 +22,7 @@
   "devDependencies": {
     "@dload/shared": "*",
     "@dload/tsconfig": "*",
-    "@types/express": "^4.17.13",
+    "@types/express": "^5.0.0",
     "@types/fs-extra": "^9.0.13",
     "@types/lodash": "^4.14.184",
     "@types/node": "^16.11.56",
