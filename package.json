@@ -19,6 +19,6 @@
     "server:dev": "turbo run dev --scope=server"
   },
   "dependencies": {
-    "turbo": "^1.7.0"
+    "turbo": "^2.0.0"
   }
 }
