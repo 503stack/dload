@@ -41,7 +41,7 @@ RUN yarn clean
 
 RUN yarn build
 
-FROM debian:bookworm AS runner
+FROM debian:trixie AS runner
 
 ENV \
   S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
