@@ -1,4 +1,4 @@
-FROM node:24-bookworm AS base
+FROM node:26-bookworm AS base
 
 # yarn is no longer bundled with newer node images
 RUN command -v yarn || npm install -g yarn@1
