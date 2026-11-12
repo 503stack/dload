@@ -1,6 +1,9 @@
-FROM node:lts-bookworm as base
+FROM node:24-bookworm AS base
 
-FROM base as setup
+# yarn is no longer bundled with newer node images
+RUN command -v yarn || npm install -g yarn@1
+
+FROM base AS setup
 
 ARG TARGETPLATFORM
 
@@ -12,13 +15,15 @@ RUN /tmp/install-s6overlay.sh "${TARGETPLATFORM}" /root-outputs
 
 WORKDIR /app
 
-RUN yarn global add turbo
+# install the turbo version the repo depends on, so prune matches the lockfile
+COPY package.json /tmp/root-package.json
+RUN yarn global add "turbo@$(node -p "require('/tmp/root-package.json').dependencies.turbo")"
 
 COPY . .
 
 RUN turbo prune --scope=@dload/aria --scope=@dload/server --scope=@dload/client --docker --out-dir=out
 
-FROM base as installer
+FROM base AS installer
 
 WORKDIR /app
 
@@ -44,18 +49,14 @@ ENV \
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y --no-install-recommends \
       ca-certificates \
       procps \
-      gnupg \
       bash \
       curl \
       grep \
       git \
       nginx
 
-RUN mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    NODE_MAJOR=20  && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt update && apt install -y nodejs
+# same node runtime the app was built with
+COPY --from=base /usr/local/bin/node /usr/local/bin/node
 
 COPY docker/root-fs /
 COPY --from=setup /root-outputs /
