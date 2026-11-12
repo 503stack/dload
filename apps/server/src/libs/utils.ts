@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'crypto'
 import fs from 'fs-extra'
 import * as logger from './logger'
 
@@ -90,7 +90,7 @@ export function getEnvValue(
 }
 
 export function generateUuid() {
-  return uuidv4()
+  return randomUUID()
 }
 
 export function getFileExtension(name: string) {
