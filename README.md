@@ -18,7 +18,7 @@ docker run -d \
   -v ./config:/config \
   -v ./downloads:/downloads \
   --restart unless-stopped \
-  fuzzknob/dload
+  ghcr.io/503stack/dload
 ```
 ### With Docker Compose
 
@@ -29,7 +29,7 @@ version: "3"
 services:
   dload:
     container_name: dload
-    image: fuzzknob/dload
+    image: ghcr.io/503stack/dload
     environment:
       - PUID=1000
       - PGID=1000
