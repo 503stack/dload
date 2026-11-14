@@ -9,6 +9,7 @@ import {
 import {
   getDetails,
   cleanDownload,
+  getPartialDownloadPath,
   stopDownload,
   formatDownloadSpeed,
   updateClientTasks,
@@ -80,8 +81,9 @@ export async function startDownload(task: Task) {
 
 export async function removeDownload(task: Task) {
   if (!task.gid) return taskStore.deleteTask(task.id)
+  const path = await getPartialDownloadPath(task.gid)
   await stopDownload(task.gid)
-  await cleanDownload(`${task.downloadPath}/${task.name}`)
+  if (path) await cleanDownload(path)
   taskStore.deleteTask(task.id)
 }
 
