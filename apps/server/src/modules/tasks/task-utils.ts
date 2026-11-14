@@ -6,6 +6,7 @@ import {
   formatRemainingTime,
   getFileExtension,
 } from '@/libs/utils'
+import fs from 'fs-extra'
 import aria2, { AriaAdapter } from '@/libs/aria2'
 import { io } from '@/libs/socket'
 import { SOCKET_EVENTS } from '@dload/shared'
@@ -24,6 +25,21 @@ export function formatDownloadSpeed(downloadSpeed: bigint) {
 export async function cleanDownload(path: string) {
   await removeFile(path)
   await removeFile(`${path}.aria2`)
+}
+
+// Resolve the file aria2 is actually writing, which differs from dir/out when
+// auto-file-renaming kicked in (e.g. 1080p.1.mp4). Only return it when it has
+// an .aria2 control file: a waiting download still reports dir/out, which may
+// be the user's pre-existing file and must never be deleted.
+export async function getPartialDownloadPath(gid: string) {
+  try {
+    const status = await aria2.tellStatus(gid)
+    const path = status.files[0]?.path
+    if (path && (await fs.pathExists(`${path}.aria2`))) return path
+  } catch (e) {
+    return null
+  }
+  return null
 }
 
 export function calculateRemainingTime(
